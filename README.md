@@ -12,3 +12,8 @@ A fintech-grade AI Advisor using:
 
 ## Running the backend
 
+uvicorn finance_advisor.backend.main:app 
+
+## Runnit frontend 
+cd frontend 
+streamlit run app.py
