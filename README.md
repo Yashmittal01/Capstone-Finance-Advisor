@@ -17,3 +17,6 @@ uvicorn finance_advisor.backend.main:app
 ## Runnit frontend 
 cd frontend 
 streamlit run app.py
+
+## .env
+REDIS_URL=redis://localhost:6379
