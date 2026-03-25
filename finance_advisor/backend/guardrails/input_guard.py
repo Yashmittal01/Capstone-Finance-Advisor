@@ -110,14 +110,16 @@ def is_finance_related(text: str) -> bool:
         if keyword in lowered:
             return True
     
-    # Check for some common finance-related patterns
-    finance_patterns = [
-        "guide me", "help me invest", "portfolio", "how much", "how to invest",
-        "investment option", "best fund", "should i", "can i", "is sip good",
-        "planning", "saving", "retirement", "goal", "money", "financial",
+    # Check for follow-up question patterns (allow if they seem like continuations)
+    followup_patterns = [
+        "explain more", "tell me more", "can you explain", "what about", "how about",
+        "what is", "what are", "what do", "what does", "what can", "what should",
+        "why", "how", "when", "where", "which", "more about", "details about",
+        "elaborate", "expand", "clarify", "please explain", "i want to know",
+        "can you tell me", "could you explain", "would you explain",
     ]
     
-    for pattern in finance_patterns:
+    for pattern in followup_patterns:
         if pattern in lowered:
             return True
     

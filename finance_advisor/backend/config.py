@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     # ✅ Embeddings (local)
     embedding_model: str = Field("all-MiniLM-L6-v2", env="EMBEDDING_MODEL")
 
+    # ✅ Redis Config
+    redis_url: str = Field("redis://localhost:6379", env="REDIS_URL")
+
     # ✅ Optional app settings
     debug: bool = Field(True, env="DEBUG")
     allowed_origins: str = Field("*", env="ALLOWED_ORIGINS")

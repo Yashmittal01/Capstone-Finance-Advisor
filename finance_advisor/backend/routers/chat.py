@@ -14,7 +14,7 @@ from finance_advisor.backend.mcp.server import get_mcp_schema, call_mcp_tool
 from finance_advisor.backend.guardrails.input_guard import check_user_input, is_finance_related
 from finance_advisor.backend.guardrails.output_guard import sanitize_output, append_disclaimer
 
-from finance_advisor.backend.db.conversation_store import save_message
+from finance_advisor.backend.db.conversation_store import save_message, get_conversation
 from finance_advisor.backend.db.user_store import ensure_user
 
 
@@ -60,6 +60,9 @@ def chat_endpoint(payload: ChatRequest):
         
         # Save the user message into SQLite
         save_message(session_id, "user", payload.message)
+
+        # Load conversation history for context
+        conversation_history = get_conversation(session_id)
 
         # -----------------------------
         # Load memory
@@ -127,8 +130,17 @@ def chat_endpoint(payload: ChatRequest):
         messages = [
             {"role": "system", "content": system_prompt},
             {"role": "system", "content": memory_context},
-            {"role": "user", "content": payload.message},
         ]
+
+        # Add conversation history (excluding the current message which is already saved)
+        for conv_msg in conversation_history[:-1]:  # Exclude the last message (current user message)
+            messages.append({
+                "role": conv_msg.role,
+                "content": conv_msg.message
+            })
+
+        # Add current user message
+        messages.append({"role": "user", "content": payload.message})
 
         # ================================
         # Multi-turn tool calling loop
